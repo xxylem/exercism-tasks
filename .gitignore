@@ -3,3 +3,5 @@
 exercism.exe
 
 node_modules
+.gradle
+build
