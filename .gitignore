@@ -5,3 +5,6 @@ exercism.exe
 node_modules
 .gradle
 build
+.vs
+.stack-work
+__pycache__
