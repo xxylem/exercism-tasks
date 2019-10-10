@@ -1,3 +1,5 @@
 
 .exercism.exe.old
 exercism.exe
+
+node_modules
