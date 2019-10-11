@@ -9,3 +9,4 @@ build
 .stack-work
 __pycache__
 scratchWork
+.idea

@@ -31,12 +31,10 @@ class Hamming {
 
     }
 
-    // Getters
-    int getHammingDistance() { return hammingDistance; } 
-    String getLeftStrand() { return leftStrand; } 
-    String getRightStrand() { return rightStrand; } 
+    // Getter
+    int getHammingDistance() { return hammingDistance; }
 
-    void computeHammingDistance() {
+    private void computeHammingDistance() {
         
         int dist = 0;
 
