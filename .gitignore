@@ -1,7 +1,5 @@
-
 .exercism.exe.old
 exercism.exe
-
 node_modules
 .gradle
 build
@@ -9,4 +7,19 @@ build
 .stack-work
 __pycache__
 scratchWork
+*.suo
+*.opendb
+*.db
+*.ipch
 .idea
+.vs
+.vscode
+Debug
+**/out/**
+venv
+*.iml
+*.class
+*.iws
+**/bin/**
+.settings
+cache
