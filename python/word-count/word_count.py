@@ -19,4 +19,4 @@ def count_words(phrase):
         if word:
             word_counter[word] += 1
         
-    return dict(word_counter)
+    return word_counter
