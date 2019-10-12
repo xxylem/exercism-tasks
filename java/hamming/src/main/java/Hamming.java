@@ -11,18 +11,15 @@ class Hamming {
         int lenR = rightStrand.length();
 
         // Sanity check on arguments.
-        if (lenL == 0 && lenR > 0) {
+        if (lenL == 0 && lenR > 0)
             throw new IllegalArgumentException(
                 "left strand must not be empty.");
-        }
-        else if (lenR == 0 && lenL > 0) {
+        if (lenR == 0 && lenL > 0)
             throw new IllegalArgumentException(
                 "right strand must not be empty.");
-        }
-        else if (lenL != lenR) {
+        if (lenL != lenR)
             throw new IllegalArgumentException(
                 "leftStrand and rightStrand must be of equal length.");
-        }
 
         this.len = lenL;
         this.leftStrand = leftStrand;
