@@ -1,18 +1,14 @@
-def is_isogram(string):
+import re
+
+def is_isogram(phrase):
     ''' Determine if a word or phrase is an isogram.
-        Input is a string to test
+        Input is a phrase to test
         Output is bool: True if is isogram, otherwise False'''
-    
-    # Keep record of letters found so far
-    letters_found = ''
-    
-    # Iterate over full length of input string
-    for char in string:
-        # Ignore punctuaction
-        if char.isalpha():
-            # Ignore case
-            if char.lower() in letters_found:
-                return False
-            else:
-                letters_found += char.lower()
-    return True
+
+    # Get all the letters used in the word or phrase and
+    # convert them to lower case.
+    letters = re.sub(r"[^A-Za-z]", '', phrase).lower()
+
+    # Check for duplicates
+    return len(letters) == len(set(letters))
+   
