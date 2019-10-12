@@ -12,12 +12,9 @@ def distance(strand_a, strand_b):
 
     hamming_distance = 0
     
-    # Iterate over the same character in each string (parallel, not nested)
-    for x in range(len(strand_a)):
-        # Check for parity
-        if strand_a[x] != strand_b[x]:
-            # Increment Hamming counter
+    # Calculate number of characters that differ
+    for (a, b) in zip(strand_a, strand_b):
+        if a != b:
             hamming_distance += 1
-    
-    # Return the Hamming distance
-    return hamming_distance    
+
+    return hamming_distance
