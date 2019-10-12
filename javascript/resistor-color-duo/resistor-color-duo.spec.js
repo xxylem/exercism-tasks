@@ -5,19 +5,19 @@ describe('Resistor Colors', () => {
     expect(value(['brown', 'black'])).toEqual(10);
   });
 
-  xtest('Blue and grey', () => {
+  test('Blue and grey', () => {
     expect(value(['blue', 'grey'])).toEqual(68);
   });
 
-  xtest('Yellow and violet', () => {
+  test('Yellow and violet', () => {
     expect(value(['yellow', 'violet'])).toEqual(47);
   });
 
-  xtest('Orange and orange', () => {
+  test('Orange and orange', () => {
     expect(value(['orange', 'orange'])).toEqual(33);
   });
 
-  xtest('Ignore additional colors', () => {
+  test('Ignore additional colors', () => {
     expect(value(['green', 'brown', 'orange'])).toEqual(51);
   })
 });
