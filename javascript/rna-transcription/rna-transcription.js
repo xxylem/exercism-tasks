@@ -3,12 +3,8 @@
  *  ASSUMES: dna_strand is a valid DNA strand. */
 export const toRna = (dna_strand) => {
 
-  let rna_strand = '';
-  for (const nucleotide of dna_strand) {
-    rna_strand += nucleotide_translations[nucleotide];
-  }
-
-  return rna_strand;
+  return [...dna_strand].map((nucleotide =>
+    nucleotide_translations[nucleotide] )).join('');  
 };
 
 const nucleotide_translations = { 'G': 'C'
