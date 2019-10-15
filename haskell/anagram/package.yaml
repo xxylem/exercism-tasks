@@ -1,0 +1,22 @@
+name: anagram
+version: 1.4.0.8
+
+dependencies:
+  - base
+
+library:
+  exposed-modules: Anagram
+  source-dirs: src
+  ghc-options: -Wall
+  dependencies:
+    - case-insensitive
+    - containers
+    - text
+
+tests:
+  test:
+    main: Tests.hs
+    source-dirs: test
+    dependencies:
+      - anagram
+      - hspec
