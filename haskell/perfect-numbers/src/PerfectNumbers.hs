@@ -6,10 +6,10 @@ data Classification = Deficient | Perfect | Abundant deriving (Eq, Show)
 classify :: Int -> Maybe Classification
 classify x 
     | x <= 0 = Nothing
-    | otherwise = case compare (sum (factorsOf x)) x of
-                    GT -> Just Abundant
-                    EQ -> Just Perfect
-                    LT -> Just Deficient
+    | otherwise = Just $ case compare (sum (factorsOf x)) x of
+                            GT -> Abundant
+                            EQ -> Perfect
+                            LT -> Deficient
 
 
 factorsOf :: Int -> [Int]
