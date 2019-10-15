@@ -23,3 +23,4 @@ venv
 **/bin/**
 .settings
 cache
+**/vendor/**
