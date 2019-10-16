@@ -3,10 +3,10 @@
               every letter of the English alphabet at least once. */
 export const isPangram = (sentence) => {
 
-  sentence = new Set(
-    sentence.toLowerCase().replace(/[^a-z]/g, ''));
+  const letters_found = new Set(
+    sentence.toLowerCase().match(/[a-z]/g));
 
-  return sentence.size == 26;
+  return letters_found.size == 26;
 
 };
 
