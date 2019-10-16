@@ -6,7 +6,7 @@ export const isPangram = (sentence) => {
   const letters_found = new Set(
     sentence.toLowerCase().match(/[a-z]/g));
 
-  return letters_found.size == 26;
+  return letters_found.size === 26;
 
 };
 
