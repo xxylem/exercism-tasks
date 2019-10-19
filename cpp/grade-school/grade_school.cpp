@@ -13,7 +13,7 @@ namespace grade_school {
 		return _roster;
 	}
 
-	void school::add(string name, int grade)
+	void school::add(const string& name, const int& grade)
 	{
 		// INVARIANT: Students are added to the grade roster s.t. they are
 		//			  stored alphabetically.
@@ -26,7 +26,7 @@ namespace grade_school {
 	}
 
 	/** Returns: sorted list of students in the given grade. */
-	vector<string> school::grade(int g) const
+	vector<string> school::grade(const int& g) const
 	{
 		try
 		{
