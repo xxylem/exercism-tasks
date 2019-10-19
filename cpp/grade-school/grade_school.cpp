@@ -13,14 +13,14 @@ namespace grade_school {
 		return _roster;
 	}
 
-	void school::add(std::string name, int grade)
+	void school::add(string name, int grade)
 	{
 		// INVARIANT: Students are added to the grade roster s.t. they are
 		//			  stored alphabetically.
 		vector<string> &grade_roster = _roster[grade];
 		grade_roster.insert
 		(
-			std::upper_bound(grade_roster.begin(), grade_roster.end(), name),
+			upper_bound(grade_roster.begin(), grade_roster.end(), name),
 			name
 		);
 	}
