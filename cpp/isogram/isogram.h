@@ -5,7 +5,7 @@
 
 namespace isogram {
 
-	bool is_isogram(std::string word);
+	const bool is_isogram(const std::string& word);
 
 }  // namespace isogram
 

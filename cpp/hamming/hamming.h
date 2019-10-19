@@ -5,7 +5,7 @@
 
 namespace hamming {
 
-	int compute(std::string left_strand, std::string right_strand);
+	int compute(const std::string& left_strand, const std::string& right_strand);
 
 }  // namespace hamming
 

@@ -5,9 +5,11 @@
 
 namespace isogram {
 
-	bool is_isogram(std::string word) {
+	using namespace std;
+
+	const bool is_isogram(const string& word) {
 		
-		std::map<char, bool> seen_letters;
+		map<char, bool> seen_letters;
 		
 		for (char c : word) {
 
