@@ -17,22 +17,22 @@ namespace grade_school {
 	{
 		// INVARIANT: Students are added to the grade roster s.t. they are
 		//			  stored alphabetically.
-		vector<string>* grade_roster = &_roster[grade];
-		(*grade_roster).insert
+		vector<string> &grade_roster = _roster[grade];
+		grade_roster.insert
 		(
-			std::upper_bound((*grade_roster).begin(), (*grade_roster).end(), name),
+			std::upper_bound(grade_roster.begin(), grade_roster.end(), name),
 			name
 		);
 	}
 
 	/** Returns: sorted list of students in the given grade. */
-	std::vector<std::string> school::grade(int g) const
+	vector<string> school::grade(int g) const
 	{
 		try
 		{
 			return _roster.at(g);
 		}
-		catch (out_of_range& const e)
+		catch (const out_of_range&)
 		{
 			return {};
 		}
