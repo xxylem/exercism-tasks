@@ -10,15 +10,15 @@ namespace nucleotide_count {
 	{
 	public:
 
-		counter(std::string dna_strand);
+		counter(const std::string& dna_strand);
 		std::map<char, int> nucleotide_counts(void) const;
-		int count(const char nucleotide) const;
+		const int count(const char& nucleotide) const;
 
 	private:
 
 		std::map<char, int> m_nucleotide_count;
 		const std::string valid_nucleotides = "ATCG";
-		bool is_valid_nucleotide(const char nucleotide) const;
+		const bool is_valid_nucleotide(const char& nucleotide) const;
 
 	};
 
