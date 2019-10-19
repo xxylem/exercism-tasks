@@ -10,7 +10,6 @@ TEST_CASE("a_new_school_has_an_empty_roster")
     REQUIRE(school_.roster().empty());
 }
 
-#if defined(EXERCISM_RUN_ALL_TESTS)
 TEST_CASE("adding_a_student_adds_them_to_the_roster_for_the_given_grade")
 {
     grade_school::school school_;
@@ -93,4 +92,5 @@ TEST_CASE("checking_a_grade_should_not_change_the_roster")
     REQUIRE(school_.roster().empty());
 }
 
+#if defined(EXERCISM_RUN_ALL_TESTS)
 #endif
