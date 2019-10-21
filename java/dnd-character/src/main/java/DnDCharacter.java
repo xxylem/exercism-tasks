@@ -24,7 +24,7 @@ class DnDCharacter {
     }
 
     int ability() {
-        IntStream dice = r.ints(4, 1, 6);
+        IntStream dice = r.ints(4, 1, 7);
         dice = dice.sorted();
         dice = dice.skip(1);
         return dice.sum();
