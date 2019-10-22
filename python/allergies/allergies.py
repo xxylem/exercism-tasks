@@ -9,7 +9,7 @@ class Allergies(object):
         allergy_values = [bool(int(x)) for x in format(score, '08b')][-8:]
         self.allergies = dict(zip(self.ALLERGY_KEYS, allergy_values))
 
-    def is_allergic_to(self, item):
+    def allergic_to(self, item):
         return self.allergies[item]
 
     @property
