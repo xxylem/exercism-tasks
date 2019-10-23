@@ -59,8 +59,7 @@ def primes_up_to_inclusive(n):
 
 
 # This version simply makes use of Sympy's number theory library. This is what I would
-# use in a real-life case rather than writing everything from scratch. Below is the
-# hand-made version.
+# use in a real-life case rather than writing everything from scratch.
 def factors_using_library(value):
     """ Returns prime factorisation of the given positive integer. """
     factors_found = []
