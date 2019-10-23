@@ -10,7 +10,11 @@ class Robot(object):
         self.new_name()
 
     def reset(self):
+        old_name = self.name
         self.new_name()
+        # Only remove the old name after the new name has been generated to
+        # stop the very small chance that the same name is generated again.
+        Robot.names_in_use.remove(old_name)
 
     def new_name(self):
         random_name = Robot.generate_random_name()
