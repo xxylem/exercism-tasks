@@ -62,7 +62,5 @@ def primes_up_to_inclusive(n):
 # use in a real-life case rather than writing everything from scratch.
 def factors_using_library(value):
     """ Returns prime factorisation of the given positive integer. """
-    factors_found = []
-    for (factor, multiplicity) in factorint(value).items():
-        factors_found += ([factor] * multiplicity)
-    return factors_found
+
+    return factorint(value, multiple=True)
