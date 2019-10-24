@@ -41,13 +41,14 @@ def parse(input_string):
     return tree
 
 def is_tree(input_string):
-    return r.fullmatch(r"^\(.*\)$", input_string) is not None
+    return r.fullmatch(r"^\(.*\)$", input_string, flags=r.DOTALL) is not None
 
 def parse_tree(input_string):
-    while is_tree(input_string):
-        input_string = r.sub(r"^\((?<inner>.*)\)$", "\g<inner>", input_string)
 
-    m = r.fullmatch(r";(?<root_node>[^();]*)(?<rest>.*)", input_string)
+    while is_tree(input_string):
+        input_string = r.sub(r"^\((?<inner>.*)\)$", r"\g<inner>", input_string, flags=r.DOTALL)
+
+    m = r.fullmatch(r";(?<root_node>[^();]*)(?<rest>.*)", input_string, flags=r.DOTALL)
 
     if m is None:
         raise ValueError("Tree has no nodes.")
@@ -78,12 +79,12 @@ def tree_or_children_is_next(input_string):
 def parse_root_node(input_string):
 
     tree = SgfTree()
-    properties = r.findall(r"[A-Z]+(?:\[[^\[\];]+\])+", input_string)
+    properties = r.findall(r"[A-Z]+(?:\[.*?(?<!\\)\])+", input_string, flags=r.DOTALL)
 
     if len(properties) == 0 and len(input_string) > 0:
         raise ValueError("Failed to parse property.")
     for prop in properties:
-        m = r.fullmatch(r"(?<Key>[A-Z]+)(?<valueList>(?:\[[^\[\];]+\])+)", prop)
+        m = r.fullmatch(r"(?<Key>[A-Z]+)(?<valueList>(?:\[.+?(?<!\\)\])+)", prop, flags=r.DOTALL)
         key = m.group("Key")
         value_list = m.group("valueList")
         value_list = parse_value_list(value_list)
@@ -91,11 +92,18 @@ def parse_root_node(input_string):
 
     return tree
 
+
 def parse_value_list(input_string):
-    values = r.findall(r"\[(?<value>[^\[\];]*)\]", input_string)
-    return values
+    values = r.findall(r"\[(?<value>.*?)(?<!\\)\]", input_string, flags=r.DOTALL)
+    return [clean_value(value) for value in values]
 
 def split_up_children(input_string):
-    children = r.findall(r"(?:\(([^()]*)\))", input_string)
+    children = r.findall(r"(?:\(([^()]*)\))", input_string, flags=r.DOTALL)
 
     return children
+
+
+def clean_value(input_string):
+    input_string = r.sub(r"\t", " ", input_string, flags=r.DOTALL)
+    input_string = r.sub(r"\\(?=\\)|\\(?=\])", "", input_string, flags=r.DOTALL)
+    return input_string
