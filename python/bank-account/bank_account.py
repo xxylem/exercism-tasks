@@ -49,6 +49,6 @@ class BankAccount(object):
         with self.lock:
             if self.active:
                 self.active = False
-                self.balance = 0
+                self.balance = None
             else:
                 raise ValueError("Account is not open.")
