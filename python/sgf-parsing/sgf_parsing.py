@@ -45,60 +45,75 @@ def parse(input_string):
 
 def __has_outer_parentheses(input_string):
     """ Checks that the string starts and ends with parentheses. """
-    return r.match(r"\(.*\)", input_string, flags=r.DOTALL) is not None
+    return r.match(r"^\(.*\)$", input_string, flags=r.DOTALL) is not None
 
 
 def __parse_tree(input_string):
-    """ Input: a SgfTree in string representation, optionally prepended by some number
-                of single nodes.
+    """ Input: a SgfTree in string representation, including outer parentheses.
         Output: the SgfTree
         NOTE: Only a single tree is valid. If you have multiple together, such as
-                (;B[C])(;C[D]), they must be split first using split_up_children(). """
-    # The outer parentheses may not exist because we also recursively call the
-    # method on subtrees
-    input_string = strip_outer_parentheses(input_string)
-    m = r.fullmatch(r";(?<root_node>[^();]*)(?<rest>.*)", input_string, flags=r.DOTALL)
+                (;B[C])(;C[D]), they must be split first using split_up_variations(). """
+
+    # An SGF tree comprises some number of single nodes, e.g. ;A[B];B[C], optionally
+    # followed by some number of variations, e.g. (;B[C])(;C[D]). Here, we split up
+    # these two parts of the tree.
+    m = r.fullmatch(r"\((?<single_nodes>(?:;[^();]*)+)(?<variations>.*)\)", input_string, flags=r.DOTALL)
 
     if m is None:
         raise ValueError("Tree has no nodes.")
 
-    root_node = m.group("root_node")
-    rest = m.group("rest")
+    single_nodes = m.group("single_nodes")
+    variations = m.group("variations")
 
-    # Makes tree with no children with all the properties that the current node has.
-    tree = __parse_node(root_node)
+    # We deal with all the single nodes at the start. This makes a very thin tree.
+    tree_root, last_child = __parse_single_nodes(single_nodes)
 
-    # In this case, there are no children (neither single nor multiple variations)
-    if len(rest) == 0:
-        return tree
+    if len(variations) == 0:
+        return tree_root
 
-    # If the rest starts with a node, we recurse on the rest and add the result
-    # as the only child of the current node.
-    if __starts_with_node(rest):
-        tree.children = [__parse_tree(rest)]
-        return tree
-
-    # The rest must either a full tree or multiple trees in sequence.
-    # They are all direct children of the current node.
-    children = __split_up_children(rest)
-    children_trees = [__parse_tree(child) for child in children]
-    tree.children = children_trees
-    return tree
+    # Then we deal with any variations. Since these are full trees, we can split them
+    # up and recurse on each separately. Finally, we add them as children to the last
+    # child in the tree of single nodes.
+    variations = __split_up_variations(variations)
+    variation_trees = [__parse_tree(variation) for variation in variations]
+    last_child.children = variation_trees
+    return tree_root
 
 
-def strip_outer_parentheses(input_string):
-    return r.sub(r"^\((?<inner>.*)\)$", r"\g<inner>", input_string, flags=r.DOTALL)
-
-
-def __split_up_children(input_string):
+def __split_up_variations(input_string):
     """ Input: the string representation of child trees in sequence.
         Output: a list of the string representations separated.
         E.g.: '(;B[C])(;C[D])' -> ['(;B[C])', '(;C[D])'] """
-    return r.findall(r"(?:\(([^()]*)\))", input_string, flags=r.DOTALL)
+    return r.findall(r"(\([^()]*\))", input_string, flags=r.DOTALL)
 
 
-def __starts_with_node(input_string):
-    return input_string[0] == ";"
+def __parse_single_nodes(single_nodes: str):
+    """ Input: the string representation of a sequence of single nodes, each of which
+              is the direct child of the one immediately before it.
+        Output: tree_root, the full SgfTree consisting of all nodes where the leftmost
+                node in the input is the tree root.
+                last_child, the final child in the tree, which is the rightmost string in
+                the input.
+        E.g.: ;A[B];B[C];D[asd];F[foo]
+                ^                  ^
+                |                  |
+            tree_root           last_child """
+    single_nodes = r.findall(r";([^();]*)", single_nodes, flags=r.DOTALL)
+    parsed_nodes = [__parse_node(node) for node in single_nodes]
+
+    # There is only one node, which is both the tree_root and the last_child.
+    if len(parsed_nodes) == 1:
+        return parsed_nodes[0], parsed_nodes[0]
+
+    tree_root = parsed_nodes[0]
+    last_child = parsed_nodes[-1]
+    child_node = last_child
+    # Makes each node the child of the node before it.
+    for node in parsed_nodes[-2::-1]:
+        node.children = [child_node]
+        child_node = node
+
+    return tree_root, last_child
 
 
 def __parse_node(node: str):
