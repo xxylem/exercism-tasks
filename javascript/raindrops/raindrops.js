@@ -1,8 +1,18 @@
-//
-// This is only a SKELETON file for the 'Raindrops' exercise. It's been provided as a
-// convenience to get you started writing code faster.
-//
+const DROPS = {
+  3: "Pling",
+  5: "Plang",
+  7: "Plong"
+};
 
-export const convert = () => {
-  throw new Error("Remove this statement and implement this function");
+export const convert = (number) => {
+  let output = "";
+  for (const [factor, drop] of Object.entries(DROPS)) {
+    if (number % factor == 0)
+      output += drop;
+  }
+
+  if (!output)
+    output = number.toString();
+
+  return output;
 };
