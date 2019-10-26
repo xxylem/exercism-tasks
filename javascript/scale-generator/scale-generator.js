@@ -4,11 +4,9 @@ const ALL_NOTES_SHARPS = [
 const ALL_NOTES_FLATS = [
   'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E'
 ];
-const USES_FLATS = {
-  'F': true, 'Bb': true, 'Eb': true, 'Ab': true, 'Db': true, 
-  'Gb': true, 'd': true, 'g': true, 'c': true, 'f': true, 
-  'bb': true, 'eb': true
-};
+const USES_FLATS = new Set([
+  'F', 'Bb', 'Eb', 'Ab', 'Db', 'Gb', 'd', 'g', 'c', 'f', 'bb', 'eb'
+]);
 const INTERVAL_SIZE = {
   'm': 1,
   'M': 2,
@@ -20,7 +18,7 @@ const INTERVAL_SIZE = {
 const build_note_list_on = (tonic) => {
   let notes = [];
   
-  if (USES_FLATS[tonic]) {
+  if (USES_FLATS.has(tonic)) {
     notes = ALL_NOTES_FLATS;
   }
   else {
