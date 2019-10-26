@@ -1,5 +1,5 @@
 const encode_repeated_char = (char, count) => {
-  
+
   if (count < 2) {
     return char;
   }
@@ -41,7 +41,7 @@ export const decode = (string) => {
     if (/[A-Z ]/i.test(c)) {
       
       if (number) {
-        decoded_string += c.repeat(number.toString());
+        decoded_string += c.repeat(number);
         number = '';
       }
 
