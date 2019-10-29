@@ -15,18 +15,18 @@ const convertToDecimal = (digits, inBase) => {
 
 const convertFromDecimal = (number, outBase) => {
 
-  if (number === 0)
-    return [0];
-
   let digits = [];
-  while (number) {
+
+  do {
+
     digits.push(number % outBase);
     number = Math.floor(number / outBase);
-  }
+    
+  } while (number);
 
   return digits.reverse();
 
-}
+};
 
 const validateBase = base => 
   base !== undefined && Number.isInteger(base) && base > 1;
