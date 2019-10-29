@@ -1,6 +1,7 @@
 const tolerance = 0.00001
 
 export class Triplet {
+  // ASSUMES: a, b, c are positive integers and a < b < c
   constructor(a, b, c) {
     this.a = a;
     this.b = b;
