@@ -24,7 +24,8 @@ export const largestProduct = (input_number, slice_size) => {
     return 1;
 
   return input_number
-            .split('0')
+            // Reduces the search space: product of any slice with 0 is 0
+            .split('0')  
             .map(computeLargestProduct(slice_size))
             .reduce((a, b) => Math.max(a, b), 0);
 };
