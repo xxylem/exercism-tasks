@@ -1,29 +1,49 @@
+/* The CellManager manages dependencies between InputCells, ComputeCells
+   and CallbackCells. In particular, it ensures that changes to InputCells
+   fully propagate to all ComputeCells before then informing CallbackCells
+   of any changes to ComputeCells. */
 class CellManager {
   constructor() {
-    // input/compute cell -> compute cell
+    // Stores dependencies for relationships:
+      // InputCell -> ComputeCell
+      // ComputeCell -> ComputeCell
     this.cellDependencies = new Map();
 
-    // Compute cell -> callback 
+    // Stores dependencies for relationship:
+      // ComputeCell -> CallbackCell
     this.cellCallbacks = new Map();
 
-    // Records compute cells that have updated their value
-    this.registeredComputeCellChanges = new Set();
+    // We need both kinds of dependencies because a Callback cannot trigger until all
+    // changes have propagated through all ComputeCells that the Callback depends on,
+    // since the ComputeCell may settle on the same value it had originally despite
+    // intermediate ComputeCells changing.
+
+    // Temporarily stores ComputeCells that have told the CellManager that their 
+    // value has changed. ComputeCells in these sets have not been processed yet.
+    this.computeCellsChangedNeedToInformDeps = new Set();
+    this.computeCellsChangedNeedToInformCallbacks = new Set();
   }
 
+  /* Add an InputCell -> ComputeCell or a ComputeCell -> ComputeCell 
+  / dependency relationship.  */
   addDependency(independentCell, dependentCell) {
-    if (!this.cellDependencies.has(independentCell))
-      this.cellDependencies.set(independentCell, new Set([dependentCell]));
+    if (this.cellDependencies.has(independentCell))
+      this.cellDependencies.get(independentCell).add(dependentCell);
     
-    this.cellDependencies.get(independentCell).add(dependentCell);
+    else
+      this.cellDependencies.set(independentCell, new Set([dependentCell]));
   }
 
+  /* Add a ComputeCell -> CallbackCell dependency relationship. */
   addCallbackDependency(computeCell, callbackCell) {
-    if (!this.cellCallbacks.has(computeCell))
+    if (this.cellCallbacks.has(computeCell))
+      this.cellCallbacks.get(computeCell).add(callbackCell);
+    
+    else
       this.cellCallbacks.set(computeCell, new Set([callbackCell]));
-
-    this.cellCallbacks.get(computeCell).add(callbackCell);
   }
 
+  /* Remove a ComputeCell -> CallbackCell dependency relationship. */
   removeCallbackDependency(computeCell, callbackCell) {
     if (this.cellCallbacks.has(computeCell)) {
       if (this.cellCallbacks.get(computeCell).length === 1) {
@@ -35,45 +55,74 @@ class CellManager {
     }
   }
 
+  /* Informs the CellManager that the value of the given InputCell has changed
+  /  and propagates the change through the system. */
   registerInputCellChange(inputCell) {
+    // The order of propagation of updates must be very precise to prevent CallbackCells
+    // being triggered unnecessarily. All ComputeCells must be fully updated before
+    // CallbackCells are considered.
+
+    // Simple case: nothing depends on the InputCell's value.
     if (!this.cellDependencies.has(inputCell))
       return;
 
-    // Tell compute cells about the change
-    for (const dep of this.cellDependencies.get(inputCell)) {
-      dep.updateValue();
-    }
+    // Tell compute cells that immediately depend on the InputCell about the change
+    this.cellDependencies.get(inputCell).forEach(dep => dep.updateValue())
 
+    // Then, recursively update the values of all ComputeCells that depend
+    // indirectly on this InputCell.
     this.updateComputeCells();
+
+    // Finally, update the values of any CallbackCells that depend on any
+    // ComputeCells that changed.
     this.updateCallbackCells();
   }
 
+  /* Informs the CellManager that the value of a ComputeCell has changed */
   registerComputeCellChange(computeCell) {
-    this.registeredComputeCellChanges.add(computeCell);
+    // We only log that a change has ocurred here. We cannot act yet because
+    // a ComputeCell may have many dependencies that each need to change first.
+    this.computeCellsChangedNeedToInformDeps.add(computeCell);
+    this.computeCellsChangedNeedToInformCallbacks.add(computeCell);
   }
 
+  /* Recursively updates all the ComputeCells whose dependencies have changed. */
   updateComputeCells() {
-    for (const computeCell of this.registeredComputeCellChanges) {
-      if (this.cellDependencies.has(computeCell)) {
-        for (const dep of this.cellDependencies.get(computeCell)) {
-          dep.updateValue();
-        }
-      }
-    }
+    this.computeCellsChangedNeedToInformDeps.forEach(computeCell => {
+      if (this.cellDependencies.has(computeCell))
+        this.cellDependencies.get(computeCell).forEach(dep => dep.updateValue());
+  
+      // This ComputeCell has fully informed all its dependencies of its change.
+      this.computeCellsChangedNeedToInformDeps.delete(computeCell);
+    })
+
+    // Since the dependencies may have changed, we now need to update their dependencies.
+    // This is not necessary for the test suite, but allows for arbitrary depth of dependencies.
+    if (this.computeCellsChangedNeedToInformDeps.length > 0)
+      this.updateComputeCells();
   }
 
+  /* Tells CallbackCells to update if any ComputeCells they directly depend
+     on have changed. */
   updateCallbackCells() {
-    for (const computeCell of this.registeredComputeCellChanges) {
+    this.computeCellsChangedNeedToInformCallbacks.forEach(computeCell => {
       if (this.cellCallbacks.has(computeCell)) {
-        for (const callbackCell of this.cellCallbacks.get(computeCell)) {
-          callbackCell.updateValues(computeCell);
-        }
+        this.cellCallbacks.get(computeCell).forEach(callbackCell =>
+          callbackCell.updateValues(computeCell));
       }
-    }
-    this.registeredComputeCellChanges.clear();
+    });
+  
+    this.computeCellsChangedNeedToInformCallbacks.clear();
   }
 }
 
+// Due to the design of the test suite, I have to use a globally accessible
+// CellManager. I would prefer to have the following usage:
+  // Create a CellManager. 
+  // Then ask the CellManager to create Cells.
+  // The Cells are associated with that CellManager.
+  // Dependencies are automatically established by the CellManager upon creation
+  // or upon request.
 var cm = new CellManager();
 
 export class InputCell {
@@ -89,10 +138,6 @@ export class InputCell {
     this.value = value;
     cm.registerInputCellChange(this);
   }
-
-  addDependency(cell) {
-    cm.addDependency(this, cell);
-  }
 }
 
 export class ComputeCell {
@@ -100,12 +145,15 @@ export class ComputeCell {
     this.inputCells = inputCells
     this.fn = fn;
     this.value = this.fn(this.inputCells);
-    for (const inputCell of this.inputCells) {
-      inputCell.addDependency(this);
-    }
 
+    // This isn't ideal since I am calling functions with "this" from the constructor.
+    // I would prefer the CellManager to create this Cell and automatically handle
+    // the dependency.
+    this.inputCells.forEach(inputCell => cm.addDependency(inputCell, this));
   }
 
+  /* Called when an InputCell has changed its value. The ComputeCell recalulates
+     its value, and if it's new, informs the CellManager. */
   updateValue() {
     const newVal = this.fn(this.inputCells);
     if (this.value === newVal) {
@@ -116,10 +164,8 @@ export class ComputeCell {
     cm.registerComputeCellChange(this);
   }
 
-  addDependency(cell) {
-    cm.addDependency(this, cell);
-  }
-
+  // Again, it would be preferable for the CellManager to handle this directly, but
+  // here I simply pass the request through anyway.
   addCallback(cb) {
     cm.addCallbackDependency(this, cb);
   }
