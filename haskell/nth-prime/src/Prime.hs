@@ -1,34 +1,22 @@
 module Prime (nth) where
 
-import Prelude hiding (gcd) 
--- Problem statement forbids prime-related library functions.
-
+-- Returns the nth prime if n is a natural number or 
+-- Nothing if n is not.
 nth :: Int -> Maybe Integer
-nth 0 = Nothing
-nth n = Just $ primes !! n
-
-
-primes :: [Integer]
-primes = filter isPrime [1..]
-
--- TODO this works but is very slow. 
--- Leverage the already-computed primes:
-    -- We know:
-        -- If n divides any primes < n, n is not prime
-        -- So we can disregards all multiples of
-            -- 2
-            -- 3
-            -- 5
-            -- etc
-        -- once we know that they are primes.
-isPrime :: Integer -> Bool
-isPrime n =
-    and [ n `relativelyPrimeTo` x | x <- [2..n-1]]
-
-relativelyPrimeTo :: Integer -> Integer -> Bool
-relativelyPrimeTo a b =
-    gcd a b == 1
-
-gcd :: Integer -> Integer -> Integer
-gcd a 0 = a
-gcd a b = gcd b $ a `rem` b
+nth n
+    | n < 1     = Nothing
+    | n == 1    = Just 2
+    | otherwise =
+        go [2] [3, 5..] (n - 1)
+        where
+            -- ghc complains about non-exhaustive pattern match here
+            -- but it is not a problem since there are infinite candidates
+            go primesFound (c:candidates) m 
+                | isPrime = 
+                    if m == 1 
+                    then Just c
+                    else go (c:primesFound) candidates (m-1)
+                | otherwise = go primesFound candidates m
+                where isPrime =
+                        all (\p -> c `mod` p /= 0) primesFound
+            
