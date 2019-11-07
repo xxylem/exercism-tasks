@@ -8,25 +8,20 @@ class Scrabble {
     private static Map<Character, Integer> createMap() {
         Map<Character, Integer> letterValues = new HashMap<>();
         "aeioulnrst".chars()
-                .mapToObj(letter -> (char) letter)
-                .forEach(letter -> letterValues.put(letter, 1));
-        letterValues.put('d', 2);
-        letterValues.put('g', 2);
+                .forEach(letter -> letterValues.put((char) letter, 1));
+        "dg".chars()
+                .forEach(letter -> letterValues.put((char) letter, 2));
         "bcmp".chars()
-                .mapToObj(letter -> (char) letter)
-                .forEach(letter -> letterValues.put(letter, 3));
+                .forEach(letter -> letterValues.put((char) letter, 3));
         "fhvwy".chars()
-                .mapToObj(letter -> (char) letter)
-                .forEach(letter -> letterValues.put(letter, 4));
+                .forEach(letter -> letterValues.put((char) letter, 4));
         letterValues.put('k', 5);
-        letterValues.put('j', 8);
-        letterValues.put('x', 8);
-        letterValues.put('q', 10);
-        letterValues.put('z', 10);
+        "jx".chars()
+                .forEach(letter -> letterValues.put((char) letter, 8));
+        "qz".chars()
+                .forEach(letter -> letterValues.put((char) letter, 10));
         return letterValues;
     }
-
-
 
     private final String word;
     private final int score;
@@ -35,10 +30,10 @@ class Scrabble {
         this.word = word.toLowerCase();
 
         // Calculate score
-        int tempScore = 0;
-        for (char letter : this.word.toCharArray())
-            tempScore += letterValues.get(letter);
-        score = tempScore;
+        this.score = this.word
+                .chars()
+                .map(letter -> letterValues.get((char) letter))
+                .sum();
     }
 
     // Getter
