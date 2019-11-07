@@ -3,8 +3,7 @@
 namespace sieve {
 	std::vector<int> primes(int n)
 	{
-		std::vector<bool> indexIsPrime(n + 1);
-		std::fill(indexIsPrime.begin() + 2, indexIsPrime.end(), true);
+		std::vector<bool> indexIsPrime(n + 1, true);
 
 		indexIsPrime[0] = false;
 		indexIsPrime[1] = false;
