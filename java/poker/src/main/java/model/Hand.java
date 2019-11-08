@@ -3,13 +3,14 @@ package model;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Hand implements Comparable<Hand> {
+public abstract class Hand implements Comparable<Hand> {
 
     private final String cardsStringRep;
     private List<Card> cards;
+    private static final int rankOrdinal;
     private Rank rank;
 
-    Hand(String cards) {
+    public Hand(String cards) {
         this.cardsStringRep = cards;
         parseCards();
         validateHand();
@@ -58,12 +59,4 @@ public class Hand implements Comparable<Hand> {
         return this.cards.stream().map(Card::getSuit).collect(Collectors.groupingBy(x -> x, Collectors.counting()));
     }
 
-    @Override
-    public int compareTo(Hand hand) {
-        if (this.getRank() != hand.getRank())
-            return this.getRank().compareTo(hand.getRank());
-
-        else
-            return this.getRank().compareHandsWithSameRank(this, hand);
-    }
 }
