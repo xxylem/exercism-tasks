@@ -1,7 +1,8 @@
 #include "robot_name.h"
-#include <sstream>
 
 namespace robot_name {
+
+	static std::unordered_set<std::string> names_in_use;
 
 	robot::robot() { this->generate_name();	}
 
@@ -9,25 +10,28 @@ namespace robot_name {
 
 	void robot::reset()
 	{
-		std::string old_name = this->_name;
-		for (int i = 0; i < MAX_TRIES; i++) {
-			this->generate_name();
-			if (old_name.compare(this->_name))
-				return;
-		}
-		throw std::runtime_error("Failed to generate new name. Perhaps the name pool is exhausted.");
+		this->generate_name();
 	}
 
 	void robot::generate_name()
 	{
-		std::stringstream ss;
-		ss << (char) ('A' + rand() % 26) 
-			<< (char) ('A' + rand() % 26) 
-			<< rand() % 10 
-			<< rand() % 10 
-			<< rand() % 10;
+		std::string old_name = this->_name;
+		std::string generated_name;
+		do {
+			std::stringstream ss;
+			ss << (char)('A' + rand() % 26)
+				<< (char)('A' + rand() % 26)
+				<< rand() % 10
+				<< rand() % 10
+				<< rand() % 10;
+			generated_name = ss.str();
 
-		this->_name = ss.str();
+		} while (names_in_use.count(generated_name));
+
+		this->_name = generated_name;
+
+		if (!old_name.empty())
+			names_in_use.erase(old_name);
 	}
 
 }  // namespace robot_name

@@ -3,6 +3,8 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include <unordered_set>
+#include <sstream>
 
 namespace robot_name {
 
