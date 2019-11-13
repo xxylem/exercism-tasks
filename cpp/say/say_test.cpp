@@ -6,7 +6,6 @@ TEST_CASE("zero")
     REQUIRE("zero" == say::in_english(0ULL));
 }
 
-#if defined(EXERCISM_RUN_ALL_TESTS)
 TEST_CASE("one")
 {
     REQUIRE("one" == say::in_english(1ULL));
@@ -32,6 +31,7 @@ TEST_CASE("sixty_nine")
     REQUIRE("sixty-nine" == say::in_english(69ULL));
 }
 
+#if defined(EXERCISM_RUN_ALL_TESTS)
 TEST_CASE("one_hundred")
 {
     REQUIRE("one hundred" == say::in_english(100ULL));
