@@ -17,6 +17,21 @@ public class ResistorColorTest
     }
 
     [Fact]
+    public void BadColorName()
+    {
+        Assert.Throws<System.ArgumentException>(() => 
+            ResistorColor.ColorCode(" Black"));
+    }
+
+    [Fact]
+    public void UnknownColor()
+    {
+        Assert.Throws<System.ArgumentException>(() =>
+            ResistorColor.ColorCode("aqua"));
+    }
+
+
+    [Fact]
     public void Orange()
     {
         Assert.Equal(3, ResistorColor.ColorCode("orange"));

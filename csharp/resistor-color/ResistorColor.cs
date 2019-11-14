@@ -17,7 +17,17 @@ public static class ResistorColor
         { "white",  9 }
     };
 
-    public static int ColorCode(string color) => colors[color];
+    public static int ColorCode(string color)
+    {
+        try
+        {
+            return colors[color];
+        }
+        catch (KeyNotFoundException)
+        {
+            throw new System.ArgumentException($"Unknown color: {color}");
+        }
+    }
 
     public static string[] Colors() => colors.Keys.ToArray();
 }
