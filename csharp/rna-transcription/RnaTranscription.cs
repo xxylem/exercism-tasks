@@ -4,7 +4,7 @@ using System.Linq;
 public static class RnaTranscription
 {
 
-    private static Dictionary<char, char> nucleotideMap = new Dictionary<char, char>()
+    private static readonly Dictionary<char, char> nucleotideMap = new Dictionary<char, char>()
     {
         { 'G', 'C' },
         { 'C', 'G' },
