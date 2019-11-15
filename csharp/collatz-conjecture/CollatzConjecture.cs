@@ -5,6 +5,7 @@
         if (number < 1)
             throw new System.ArgumentException("Only defined on positive integers.");
 
+        // Avoids the argument check on recurive calls.
         int Helper(int n) => 
                n == 1     ? 0
              : n % 2 == 0 ? 1 + Helper(n / 2)
