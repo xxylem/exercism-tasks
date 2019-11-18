@@ -15,14 +15,14 @@ public static class Raindrops
         );
 
     public static string Convert(int number)
-    {
+    { 
         var sb = new StringBuilder();
         foreach (var drop in DROPS)
         {
             if (number % drop.Key == 0)
                 sb.Append(drop.Value);
         }
-
+        
         return sb.Length > 0 ? sb.ToString() : number.ToString();
     }
 }
