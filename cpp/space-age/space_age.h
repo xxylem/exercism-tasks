@@ -7,10 +7,6 @@
 
 namespace space_age {
 
-	enum class Planet {
-		MERCURY, VENUS, EARTH, MARS, JUPITER, SATURN, URANUS, NEPTUNE
-	};
-	
 	class space_age
 	{
 	public:
