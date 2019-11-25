@@ -17,16 +17,21 @@ public class Robot
         do
         {
             var sb = new StringBuilder();
-            sb.Append((char) random.Next('A', 'Z'));
-            sb.Append((char) random.Next('A', 'Z'));
-            sb.Append(random.Next(0, 9));
-            sb.Append(random.Next(0, 9));
-            sb.Append(random.Next(0, 9));
+
+            sb.Append(RandomUppercaseLetter());
+            sb.Append(RandomUppercaseLetter());
+
+            sb.Append(RandomThreeDigitNumber());
+
             new_name = sb.ToString();
+
         } while (NamesInUse.Contains(new_name));
 
         NamesInUse.Remove(Name);
         Name = new_name;
         NamesInUse.Add(Name);
     }
+
+    private static char RandomUppercaseLetter() => (char)random.Next('A', 'Z');
+    private static string RandomThreeDigitNumber() => random.Next(0, 999).ToString().PadLeft(3, '0');
 }
