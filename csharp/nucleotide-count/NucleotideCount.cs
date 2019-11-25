@@ -16,11 +16,11 @@ public static class NucleotideCount
 
         foreach (char c in sequence)
         {
-            try
+            if (count.ContainsKey(c))
             {
                 count[c]++;
             }
-            catch (KeyNotFoundException)
+            else
             {
                 throw new ArgumentException($"Invalid nucleotide in sequence: {c}");
             }
