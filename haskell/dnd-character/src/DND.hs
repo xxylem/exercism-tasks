@@ -4,7 +4,8 @@ module DND ( Character(..)
            , character
            ) where
 
-import Test.QuickCheck (Gen)
+import Data.List (sortBy)
+import Test.QuickCheck (Gen, choose)
 
 data Character = Character
   { strength     :: Int
@@ -18,13 +19,33 @@ data Character = Character
   deriving (Show, Eq)
 
 modifier :: Int -> Int
-modifier =
-  error "You need to implement this function."
-
+modifier c =
+  (c - 10) `div` 2
+  
 ability :: Gen Int
-ability =
-  error "You need to implement this generator."
+ability = do
+  d1 <- dice
+  d2 <- dice 
+  d3 <- dice
+  d4 <- dice
+  return $ sum . take 3 . sortBy (flip compare) $ [d1, d2, d3, d4]
+  where dice = choose (1, 6)
 
 character :: Gen Character
-character =
-  error "You need to implement this generator."
+character = do
+  str <- ability
+  dex <- ability
+  con <- ability
+  int <- ability
+  wis <- ability
+  cha <- ability
+  
+  return Character {
+    strength = str,
+    dexterity = dex,
+    constitution = con,
+    intelligence = int,
+    wisdom = wis,
+    charisma = cha,
+    hitpoints = 10 + modifier con
+  }
