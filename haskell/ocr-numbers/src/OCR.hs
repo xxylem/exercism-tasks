@@ -10,6 +10,9 @@ toRows input =
     go input []
     where go [] rsf = rsf
           go (r:rs) ([currentRow]:rest) =
-            if any (\= ' ')
+            if any (\= ' ') r
             then go rs ([r:currentRow]:rest)
             else go rs ([r]:currentRow:rest)
+
+splitRow :: Row -> [String]
+splitRow = 

@@ -1,0 +1,38 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.2.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 03d9b3424d1bb4fadf267bc0b5dbe6b6503ada2e283f9af466021c1f695fa81b
+
+name:           run-length-encoding
+version:        1.1.0.5
+build-type:     Simple
+
+library
+  exposed-modules:
+      RunLength
+  other-modules:
+      Paths_run_length_encoding
+  hs-source-dirs:
+      src
+  ghc-options: -Wall
+  build-depends:
+      attoparsec
+    , base
+    , text
+  default-language: Haskell2010
+
+test-suite test
+  type: exitcode-stdio-1.0
+  main-is: Tests.hs
+  other-modules:
+      Paths_run_length_encoding
+  hs-source-dirs:
+      test
+  build-depends:
+      base
+    , hspec
+    , run-length-encoding
+  default-language: Haskell2010
