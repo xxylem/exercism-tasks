@@ -1,0 +1,80 @@
+class Pair {
+
+    private final int x;
+
+    private final int y;
+
+    Pair(final int x, final int y) {
+        this.y = y;
+        this.x = x;
+    }
+
+    int getX() {
+        return x;
+    }
+
+    int getY() {
+        return y;
+    }
+
+    public Pair moveNorth() {
+        return new Pair(x, y + 1);
+    }
+
+    public Pair moveNorthEast() {
+        return new Pair(x + 1, y + 1);
+    }
+
+    public Pair moveEast() {
+        return new Pair(x + 1, y);
+    }
+
+    public Pair moveSouthEast() {
+        return new Pair(x + 1, y - 1);
+    }
+
+    public Pair moveSouth() {
+        return new Pair(x, y - 1);
+    }
+
+    public Pair moveSouthWest() {
+        return new Pair(x - 1, y - 1);
+    }
+
+    public Pair moveWest() {
+        return new Pair(x - 1, y);
+    }
+
+    public Pair moveNorthWest() {
+        return new Pair(x - 1, y + 1);
+    }
+
+    public Pair toOneIndexing() {
+        return new Pair(x + 1, y + 1);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Pair pair = (Pair) o;
+
+        return x == pair.x && y == pair.y;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = x;
+        result = 31 * result + y;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Pair{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
+}
