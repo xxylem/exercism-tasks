@@ -24,9 +24,7 @@ responseFor t
           question = isQuestion t
 
 isQuestion :: Text -> Bool
-isQuestion t = not (T.null strippedText) 
-            && T.last strippedText == '?'
-    where strippedText = T.stripEnd t
+isQuestion t = "?" `T.isSuffixOf` T.stripEnd t 
 
 isYelling :: Text -> Bool
 isYelling t = not (T.any isLower t) 
