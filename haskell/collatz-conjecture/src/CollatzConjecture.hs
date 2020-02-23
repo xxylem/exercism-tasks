@@ -3,7 +3,6 @@ module CollatzConjecture (collatz) where
 collatz :: Integer -> Maybe Integer
 collatz n
     | n <  1    = Nothing
-    | n == 1    = Just 0
-    | even n    = succ <$> collatz (n `div` 2)
-    | otherwise = succ <$> collatz (3 * n + 1)
-        
+    | otherwise = go 0 n
+    where go steps 1 = Just steps
+          go steps n' = go (succ steps) (if even n' then n' `div` 2 else 3 * n' + 1)
