@@ -32,17 +32,14 @@ yacht c dice = case c of
     where numbers n = sum . filter (== n)
 
 fullHouseScore :: [Int] -> Int
-fullHouseScore dice = if length dice == 5
-    && length grp == 2
-    && ((length (head grp) == 3) || length (head grp) == 2)
-    then sum dice else 0
-    where grp = group . sort $ dice
+fullHouseScore dice = case group . sort $ dice of
+    [[_,_,_],[_,_]] -> sum dice
+    [[_,_],[_,_,_]] -> sum dice
+    _               -> 0
 
 fourOfAKindScore :: [Int] -> Int
-fourOfAKindScore dice 
-    | head sortedDice == sortedDice !! 3 = 
-        sum . init $ sortedDice
-    | sortedDice !! 1 == sortedDice !! 4 =
-        sum . tail $ sortedDice
-    | otherwise = 0
-    where sortedDice = sort dice
+fourOfAKindScore dice = case group . sort $ dice of
+    [[_,_,_,_,x]]      -> sum dice - x
+    [d@[_,_,_,_], [_]] -> sum d
+    [[_], d@[_,_,_,_]] -> sum d
+    _                  -> 0
