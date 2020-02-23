@@ -4,34 +4,34 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5cf50c33be334c94253fcbf13662f175c40acdd9b325ac9770388f04031764f6
+-- hash: 2f99b3b283d027262846a0b46d466b2919bf7a8ee3ac2a6782778e5636feb739
 
-name:           protein-translation
-version:        1.1.1.3
+name:           change
+version:        1.3.0.7
 build-type:     Simple
 
 library
   exposed-modules:
-      ProteinTranslation
+      Change
   other-modules:
-      Paths_protein_translation
+      Paths_change
   hs-source-dirs:
       src
   ghc-options: -Wall
   build-depends:
       base
-    , split
+    , safe
   default-language: Haskell2010
 
 test-suite test
   type: exitcode-stdio-1.0
   main-is: Tests.hs
   other-modules:
-      Paths_protein_translation
+      Paths_change
   hs-source-dirs:
       test
   build-depends:
       base
+    , change
     , hspec
-    , protein-translation
   default-language: Haskell2010
