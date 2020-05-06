@@ -1,8 +1,9 @@
 module SumOfMultiples (sumOfMultiples) where
 
+import qualified Data.Set as S
+
 sumOfMultiples :: [Integer] -> Integer -> Integer
-sumOfMultiples factors limit = sum 
-    [x | x <- [1..limit - 1], isMultiple x]
+sumOfMultiples factors limit = sum $ S.unions $
+    map multiplesOf factorsOnlyPositives
     where factorsOnlyPositives = filter (> 0) factors
-          isMultiple n = any (\factor -> n `mod` factor == 0) factorsOnlyPositives
-            
+          multiplesOf factor = S.fromDistinctAscList [factor, factor + factor..limit - 1]
