@@ -1,4 +1,3 @@
-#include <limits>
 #include "grains.h"
 
 namespace grains {
@@ -9,7 +8,6 @@ namespace grains {
 	}
 	const unsigned long long total()
 	{
-		// Each square is one bit in a ULL, so the total is all bits flipped to one, i.e. the max value.
-		return ULLONG_MAX;
+		return 18446744073709551615ULL;
 	}
 }  // namespace grains
