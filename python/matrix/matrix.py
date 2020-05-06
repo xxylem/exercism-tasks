@@ -7,4 +7,4 @@ class Matrix:
         return self.__matrix[index - 1]
 
     def column(self, index):
-        return list(map(lambda row: row[index - 1], self.__matrix))
+        return [row[index - 1] for row in self.__matrix]

@@ -3,9 +3,9 @@
 
 namespace grains {
 
-	const unsigned long long square(int n);
+	unsigned long long square(int n);
 
-	const unsigned long long total();
+	unsigned long long total();
 
 }  // namespace grains
 
