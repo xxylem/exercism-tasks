@@ -5,4 +5,4 @@
 
 two_fer() -> two_fer("you").
 
-two_fer(_Name) -> io_lib:format("One for ~s, one for me.", [_Name]).
+two_fer(Name) -> io_lib:format("One for ~s, one for me.", [Name]).
