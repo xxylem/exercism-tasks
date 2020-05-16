@@ -1,0 +1,26 @@
+((fn "Hello World!))
+()
+((fn [] "Hello Wolrd!))
+[]
+()
+(fn [] "Hello")
+)
+()
+asd
+zxc
+q
+]
+[
+]
+c
+()
+)
+((fn [] "Hello, World!))
+(defn hello []
+  "Hello, World!"
+)
+hello
+(hello)
+quit
+(System/getProperty "java.home")
+quit
